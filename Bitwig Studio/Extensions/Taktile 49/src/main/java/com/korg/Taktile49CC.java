@@ -62,10 +62,15 @@ public enum Taktile49CC {
     TRACK_NEXT(59),
     TRACK_PREV(58),
 
-    MOD(1),
+    MOD_WHEEL(1),
+
+    // This CC is sent when the XY pad is touched.
+    XY_TOUCH(92),
     XY_X(12),
     XY_Y(13),
 
+    // In "Touch Scale" mode, this CC is sent with a data2 value of the Y
+    // position.
     TOUCH_SCALE_Y(3),
     PEDAL(11),
     SWITCH(64);

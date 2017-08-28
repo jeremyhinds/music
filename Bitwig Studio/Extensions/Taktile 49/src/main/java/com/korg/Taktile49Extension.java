@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Taktile49Extension extends ControllerExtension {
+    private boolean debugMode = false;
 
     private List<ControlChangeHandler> ccHandlers = new ArrayList<ControlChangeHandler>();
     private NoteInput noteInput0;
@@ -37,6 +38,8 @@ public class Taktile49Extension extends ControllerExtension {
        
         ccHandlers.add(new Taktile49Transport(host.createTransport()));
         ccHandlers.add(new Taktile49Mixer(host.createMainTrackBank(8, 0, 0)));
+        ccHandlers.add(new Taktile49XYPad(host.createCursorTrack(
+            "taktile-xy-cursor-track", "taktile-xy-cursor-track", 8, 0, true)));
         ccHandlers.add(new Taktile49UserControl(
                 host.createUserControls(Taktile49CC.CONTROL_COUNT)));
        
@@ -72,10 +75,12 @@ public class Taktile49Extension extends ControllerExtension {
         final int data1 = msg.getData1();
         final int data2 = msg.getData2();
         final ControllerHost host = getHost();      
-        host.println(
-            String.format("cc: %d %d %d",
-                          msg.getStatusByte(), data1, data2)
-        );
+        if (debugMode) {
+            host.println(
+                String.format("cc: %d %d %d",
+                              msg.getStatusByte(), data1, data2)
+            );
+        }
 
         for (ControlChangeHandler handler : ccHandlers) {
             if (handler.handlesMessage(msg)) {
